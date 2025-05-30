@@ -1,0 +1,29 @@
+name: Run DHCP Test on Existing VM
+extension:
+  - microsoft
+variable:
+  - name: user_name
+    value: "azureuser"
+  - name: public_address
+    value: "20.153.156.0"
+  - name: admin_private_key_file
+    value: "/home/sharathg/keys/sharathg-lisa1_key.pem"
+testcase:
+  - criteria:
+      name: verify_dhcp_client_timeout
+environment:
+  environments:
+    - nodes:
+        - type: remote
+          public_address: $(public_address)
+          public_port: 22
+          username: $(user_name)
+          private_key_file: $(admin_private_key_file)
+platform:
+  - type: ready
+    admin_username: $(user_name)
+    admin_private_key_file: $(admin_private_key_file)
+notifier:
+  - type: console
+  - type: html
+    path: ./dhcp_test_results.html

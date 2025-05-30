@@ -1,0 +1,68 @@
+name: Run tests on existing Azure VM
+variable:
+  # VM connection details - REPLACE THESE WITH YOUR VM INFO
+  - name: public_address
+    value: "20.153.156.0"
+  - name: user_name
+    value: "azureuser"  # e.g., azureuser
+  - name: admin_private_key_file
+    value: "/home/sharathg/keys/sharathg-lisa1_key.pem"  # e.g., ~/.ssh/id_rsa
+  
+  # Optional: specify which tests to run
+  - name: case
+    value: ""  # Leave empty to run all tests, or specify test name
+  - name: area  
+    value: ""  # Leave empty or specify area like "core", "network", etc.
+  - name: category
+    value: ""  # Leave empty or specify category like "functional"
+  - name: priority
+    value: 0   # 0-3, where 0 runs all priorities
+
+# Test selection - choose one of these approaches:
+# 1. Run specific Microsoft test suites
+testcase:
+  - criteria:
+      area: $(area)
+      priority: $(priority)
+      name: $(case)
+      category: $(category)
+
+# Include the Microsoft test path
+extension:
+  - microsoft
+
+# 2. Or run specific test by name
+# testcase:
+#   - criteria:
+#       name: verify_cpu_count
+
+# 3. Or include a test suite file
+# include:
+#   - path: ./microsoft/runbook/tiers/t0.yml
+
+# Environment configuration for existing VM
+environment:
+  environments:
+    - nodes:
+        - type: remote
+          name: existing_vm
+          public_address: $(public_address)
+          public_port: 22
+          username: $(user_name)
+          private_key_file: $(admin_private_key_file)
+          # Optional: specify VM capabilities if needed for test matching
+          # capability:
+          #   core_count: 4
+          #   memory_mb: 8192
+
+# Platform configuration
+platform:
+  - type: ready
+    admin_username: $(user_name)
+    admin_private_key_file: $(admin_private_key_file)
+
+# Notifiers for test results
+notifier:
+  - type: console  # Print to console
+  - type: html     # Generate HTML report
+    path: ./lisa_results.html

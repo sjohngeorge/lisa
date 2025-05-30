@@ -33,6 +33,7 @@ from .diff import Diff
 from .dmesg import Dmesg
 from .dnsmasq import Dnsmasq
 from .docker import Docker
+from .docker_advanced import DockerAdvanced
 from .docker_compose import DockerCompose
 from .echo import Echo
 from .ethtool import Ethtool
@@ -154,6 +155,7 @@ __all__ = [
     "Dmesg",
     "Dnsmasq",
     "Docker",
+    "DockerAdvanced",
     "DockerCompose",
     "Echo",
     "Ethtool",

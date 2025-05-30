@@ -1,0 +1,34 @@
+name: Run T0 tests on existing VM
+include:
+  - path: ./microsoft/runbook/debug.yml
+extension:
+  - microsoft
+variable:
+  - name: user_name
+    value: "azureuser"
+  - name: public_address
+    value: "20.153.156.0"
+  - name: admin_private_key_file
+    value: "/home/sharathg/keys/sharathg-lisa1_key.pem"
+  - name: public_port
+    value: 22
+testcase:
+  - criteria:
+      priority: 0
+notifier:
+  - type: console
+  - type: html
+    path: ./t0_test_results.html
+environment:
+  environments:
+    - nodes:
+        - type: remote
+          name: test_vm
+          public_address: $(public_address)
+          public_port: $(public_port)
+          username: $(user_name)
+          private_key_file: $(admin_private_key_file)
+platform:
+  - type: ready
+    admin_username: $(user_name)
+    admin_private_key_file: $(admin_private_key_file)
